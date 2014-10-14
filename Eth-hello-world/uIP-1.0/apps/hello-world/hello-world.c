@@ -78,10 +78,11 @@ hello_world_appcall(void)
 		//USART_Print(USART1, "y");
 	}else if(s != NULL){
 		if(uip_newdata()){//服务器端收到客户端数据
-			USART_Print(USART1, "z");
+			//USART_Print(USART1, "z");
+			USART_SendData(USART1 , uip_len);
 			while(USART_GetFlagStatus(USART1, USART_FLAG_TC)==RESET);
 			for(i = 0; i < uip_len; ++i){
-				USART_SendData(USART1 , uip_buf[i]);
+				USART_SendData(USART1 , *((char*)uip_appdata + i));
 				while(USART_GetFlagStatus(USART1, USART_FLAG_TC)==RESET);
 			}
 		}

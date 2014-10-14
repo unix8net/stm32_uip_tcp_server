@@ -82,10 +82,8 @@ Section Cross References
     hello-world.o(.text) refers to psock.o(.text) for psock_send
     hello-world.o(.text) refers to strncpy.o(.text) for strncpy
     hello-world.o(.text) refers to strlen.o(.text) for strlen
-    hello-world.o(.text) refers to usart.o(.text) for USART_Print
-    hello-world.o(.text) refers to stm32f10x_usart.o(.text) for USART_GetFlagStatus
+    hello-world.o(.text) refers to stm32f10x_usart.o(.text) for USART_SendData
     hello-world.o(.text) refers to uip.o(.data) for uip_flags
-    hello-world.o(.text) refers to uip.o(.bss) for uip_buf
     entry.o(.ARM.Collect$$$$00000000) refers (Special) to entry10a.o(.ARM.Collect$$$$0000000D) for __rt_final_cpp
     entry.o(.ARM.Collect$$$$00000000) refers (Special) to entry11a.o(.ARM.Collect$$$$0000000F) for __rt_final_exit
     entry.o(.ARM.Collect$$$$00000000) refers (Special) to entry7b.o(.ARM.Collect$$$$00000008) for _main_clock
@@ -906,7 +904,7 @@ Image Symbol Table
     psock_readbuf                            0x080044a9   Thumb Code   142  psock.o(.text)
     psock_init                               0x08004537   Thumb Code    40  psock.o(.text)
     hello_world_init                         0x08004585   Thumb Code    12  hello-world.o(.text)
-    hello_world_appcall                      0x08004645   Thumb Code   148  hello-world.o(.text)
+    hello_world_appcall                      0x08004645   Thumb Code   152  hello-world.o(.text)
     __aeabi_memcpy                           0x08004715   Thumb Code    36  memcpya.o(.text)
     __aeabi_memcpy4                          0x08004715   Thumb Code     0  memcpya.o(.text)
     __aeabi_memcpy8                          0x08004715   Thumb Code     0  memcpya.o(.text)
@@ -1047,7 +1045,7 @@ Image component sizes
 
         12          6          0          0          0        673   clock-arch.o
          0          0          0          0          0       4244   core_cm3.o
-       400         60          0          0          0       1851   hello-world.o
+       400         56          0          0          0       1851   hello-world.o
        572         32          0          0          0     267308   main.o
        220         20          0          0          0       1661   misc.o
       1068         38          0          0          0       4480   psock.o
@@ -1057,4 +1055,6 @@ Image component sizes
        152         18          0          4          0       1715   stm32f10x_it.o
        932         44          0         20          0       8620   stm32f10x_rcc.o
        780         14          0          0          0       6386   stm32f10x_spi.o
-      3610         88          0          0          0  
+      3610         88          0          0          0      21992   stm32f10x_tim.o
+      1032         22          0          0          0       8232   stm32f10x_usart.o
+       476      
