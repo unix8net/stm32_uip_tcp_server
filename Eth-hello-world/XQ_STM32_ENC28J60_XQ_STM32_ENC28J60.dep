@@ -630,7 +630,7 @@ I (.\uIP-1.0\uip\lc.h)(0x5428D795)
 I (.\uIP-1.0\uip\lc-switch.h)(0x5428D795)
 I (uIP-1.0\uip\uip-fw.h)(0x5428D795)
 I (uIP-1.0\uip\uip_arch.h)(0x5428D795)
-F (.\uIP-1.0\apps\hello-world\hello-world.c)(0x543CD933)(-c --cpu Cortex-M3 -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork -I.\Core -I.\STM32_FWLib\inc -I.\User -I.\uIP-1.0\unix -I.\uIP-1.0\uip -I.\uIP-1.0\lib -I.\uIP-1.0\apps\webserver -I.\uIP-1.0\apps\hello-world -I d:\Keil\ARM\RV31\INC -I d:\Keil\ARM\CMSIS\Include -I d:\Keil\ARM\Inc\ST\STM32F10x -DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER -o ".\Obj\hello-world.o" --omf_browse ".\Obj\hello-world.crf" --depend ".\Obj\hello-world.d")
+F (.\uIP-1.0\apps\hello-world\hello-world.c)(0x543CDFBB)(-c --cpu Cortex-M3 -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork -I.\Core -I.\STM32_FWLib\inc -I.\User -I.\uIP-1.0\unix -I.\uIP-1.0\uip -I.\uIP-1.0\lib -I.\uIP-1.0\apps\webserver -I.\uIP-1.0\apps\hello-world -I d:\Keil\ARM\RV31\INC -I d:\Keil\ARM\CMSIS\Include -I d:\Keil\ARM\Inc\ST\STM32F10x -DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER -o ".\Obj\hello-world.o" --omf_browse ".\Obj\hello-world.crf" --depend ".\Obj\hello-world.d")
 I (uIP-1.0\apps\hello-world\hello-world.h)(0x5428D795)
 I (.\uIP-1.0\uip\uipopt.h)(0x5428D795)
 I (.\uIP-1.0\unix\uip-conf.h)(0x5428D795)
