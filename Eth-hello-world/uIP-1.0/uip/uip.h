@@ -191,7 +191,9 @@ void uip_init(void);
  * uIP initialization function.
  *
  * This function may be used at boot time to set the initial ip_id.
+ @rzw  初始化时设置ip_id
  */
+ 
 void uip_setipid(u16_t id);
 
 /** @} */
@@ -219,6 +221,10 @@ void uip_setipid(u16_t id);
  *
  * The usual way of calling the function is presented by the source
  * code below.
+ 
+ @rzw  devicedriver_poll为从网卡读取数据，在hello-world中为etherdev_read，将数据读到uip_buf，长度uip_len
+ uip_input返回时，如果有数据需要发送，则放入絬ip_buf，根据uip_len判断
+ 
  \code
   uip_len = devicedriver_poll();
   if(uip_len > 0) {
@@ -233,6 +239,7 @@ void uip_setipid(u16_t id);
  * (Address Resolution Protocol), e.g., when running uIP over
  * Ethernet, you will need to call the uIP ARP code before calling
  * this function:
+ @rzw 如果需要ARP的话则还需要根据包的类型来区分使用uip_arp_ipin还是uip_arp_arpin
  \code
   #define BUF ((struct uip_eth_hdr *)&uip_buf[0])
   uip_len = ethernet_devicedrver_poll();
@@ -271,6 +278,8 @@ void uip_setipid(u16_t id);
  *
  * The ususal way of calling the function is through a for() loop like
  * this:
+ @rzw  (不需要ARP时的处理)不管连接是打开还是关闭，在定时器时间到后都需要对每个连接调用
+ 这个函数返回时，也可能持有一个待发送的数据包
  \code
   for(i = 0; i < UIP_CONNS; ++i) {
     uip_periodic(i);
@@ -284,6 +293,7 @@ void uip_setipid(u16_t id);
  * (Address Resolution Protocol), e.g., when running uIP over
  * Ethernet, you will need to call the uip_arp_out() function before
  * calling the device driver:
+ @rzw  （需要ARP时的处理方式，在发送之前需要调用uip_arp_out）
  \code
   for(i = 0; i < UIP_CONNS; ++i) {
     uip_periodic(i);
@@ -296,6 +306,7 @@ void uip_setipid(u16_t id);
  *
  * \param conn The number of the connection which is to be periodically polled.
  *
+ @rzw  指定连接的编号
  * \hideinitializer
  */
 #define uip_periodic(conn) do { uip_conn = &uip_conns[conn]; \
@@ -317,7 +328,7 @@ void uip_setipid(u16_t id);
  *
  * \param conn A pointer to the uip_conn struct for the connection to
  * be processed.
- *
+  @rzw  指定连接的结构体
  * \hideinitializer
  */
 #define uip_periodic_conn(conn) do { uip_conn = conn; \
@@ -507,6 +518,7 @@ struct uip_conn *uip_connect(uip_ipaddr_t *ripaddr, u16_t port);
  * \param conn A pointer to the uip_conn structure for the connection.
  *
  * \hideinitializer
+ @rzw 返回上一次发送的数据量。检测发送的数据是否已经都收到ACK，即没有数据在缓冲区中等待确认
  */
 #define uip_outstanding(conn) ((conn)->len)
 
@@ -534,6 +546,7 @@ struct uip_conn *uip_connect(uip_ipaddr_t *ripaddr, u16_t port);
  * \param len The maximum amount of data bytes to be sent.
  *
  * \hideinitializer
+ @rzw  这个函数不能保证发送的数据包被对方接收到，如果数据由丢失，则会有uip_rexmit事件发生
  */
 void uip_send(const void *data, int len);
 
@@ -544,6 +557,7 @@ void uip_send(const void *data, int len);
  * The test function uip_data() must first be used to check if there
  * is any data available at all.
  *
+ @rzw 当前有效数据的长度，数据放在uip_appdata
  * \hideinitializer
  */
 /*void uip_datalen(void);*/
@@ -557,6 +571,7 @@ void uip_send(const void *data, int len);
  * function to be enabled.
  *
  * \hideinitializer
+ @rzw 到达的紧急数据长度，需要在opt中设置UIP_URGDATA
  */
 #define uip_urgdatalen()    uip_urglen
 
@@ -585,7 +600,7 @@ void uip_send(const void *data, int len);
  *
  * This function will close our receiver's window so that we stop
  * receiving data for the current connection.
- *
+ *@rzw 通知发送主机暂停发送数据
  * \hideinitializer
  */
 #define uip_stop()          (uip_conn->tcpstateflags |= UIP_STOPPED)
@@ -595,6 +610,8 @@ void uip_send(const void *data, int len);
  * uip_stop().
  *
  * \hideinitializer
+ @rzw 检查是否设置了停止发送数据
+ 
  */
 #define uip_stopped(conn)   ((conn)->tcpstateflags & UIP_STOPPED)
 
@@ -606,6 +623,7 @@ void uip_send(const void *data, int len);
  * start receiving data for the current connection.
  *
  * \hideinitializer
+ @rzw  uip_stop后重启数据发送
  */
 #define uip_restart()         do { uip_flags |= UIP_NEWDATA; \
                                    uip_conn->tcpstateflags &= ~UIP_STOPPED; \
@@ -621,9 +639,12 @@ void uip_send(const void *data, int len);
  * This function checks whether the current connection is a UDP connection.
  *
  * \hideinitializer
- *
+ *@rzw 检查房钱连接是否是UDP连接
  */
 #define uip_udpconnection() (uip_conn == NULL)
+
+
+
 
 /**
  * Is new incoming data available?
@@ -631,7 +652,7 @@ void uip_send(const void *data, int len);
  * Will reduce to non-zero if there is new data for the application
  * present at the uip_appdata pointer. The size of the data is
  * avaliable through the uip_len variable.
- *
+ @rzw 新数据到来事件，数据放在uip_appdata中，长度放于uip_len中
  * \hideinitializer
  */
 #define uip_newdata()   (uip_flags & UIP_NEWDATA)
@@ -642,7 +663,7 @@ void uip_send(const void *data, int len);
  * Will reduce to non-zero if the previously sent data has been
  * acknowledged by the remote host. This means that the application
  * can send new data.
- *
+ *@rzw 上次发送的数据是否收到ack
  * \hideinitializer
  */
 #define uip_acked()   (uip_flags & UIP_ACKDATA)
@@ -656,6 +677,7 @@ void uip_send(const void *data, int len);
  * uip_listen()).
  *
  * \hideinitializer
+ @rzw 连接是否建立判断
  */
 #define uip_connected() (uip_flags & UIP_CONNECTED)
 
